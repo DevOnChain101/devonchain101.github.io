@@ -2094,10 +2094,8 @@ const Spark = {
 	}
 };
 
-
-
 const soundManager = {
-	baseURL: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/',
+	baseURL: 'https://devonchain101.github.io/sounds/',
 	ctx: new (window.AudioContext || window.webkitAudioContext),
 	sources: {
 		lift: {
@@ -2273,22 +2271,24 @@ function setLoadingStatus(status) {
 	document.querySelector('.loading-init__status').textContent = status;
 }
 
-// CodePen profile header doesn't need audio, just initialize.
 if (IS_HEADER) {
-	init();
+    init();
 } else {
-	// Allow status to render, then preload assets and start app.
-	setLoadingStatus('Lighting Fuses');
-	setTimeout(() => {
-		soundManager.preload()
-		.then(
-			init,
-			reason => {
-				// Codepen preview doesn't like to load the audio, so just init to fix the preview for now.
-				init();
-				// setLoadingStatus('Error Loading Audio');
-				return Promise.reject(reason);
-			}
-		);
-	}, 0);
+    setLoadingStatus('Quang Hung <3 Phuong Anh');
+
+    // Preload audio but DO NOT init immediately
+    setTimeout(() => {
+        soundManager.preload()
+        .then(
+            () => {
+                // After preload finishes → wait 5 seconds → init
+                setTimeout(init, 2000);
+            },
+            reason => {
+                // Even if audio fails, still wait 5 seconds then init
+                setTimeout(init, 2000);
+                return Promise.reject(reason);
+            }
+        );
+    }, 0);
 }
